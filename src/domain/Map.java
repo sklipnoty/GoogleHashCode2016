@@ -59,7 +59,7 @@ public class Map {
     
     public int moveDrone(Drone drone, Coordinate coordinate)
     {
-        int result = move(drone.getCoords(), coordinate);
+        int result = distance(drone.getCoords(), coordinate);
         if(result != -1)
         {
             drone.setCoords(coordinate);
@@ -67,7 +67,7 @@ public class Map {
         return result;
     }
     
-    public int move(Coordinate startCoordinate, Coordinate destinationCoordinate)
+    public int distance(Coordinate startCoordinate, Coordinate destinationCoordinate)
     {
         if(destinationCoordinate.getX() < 0 || destinationCoordinate.getY() < 0 || destinationCoordinate.getX() >= cols || destinationCoordinate.getY() >= rows)
         {
