@@ -71,7 +71,7 @@ public class InputReader
         
         for (int i = 0; i < numOfOrders; i++)
         {
-            orders.add(readOrder(in));
+            orders.add(readOrder(i,in));
         }
         
         return new Map(rows, cols, warehouses, orders, drones);
@@ -90,7 +90,7 @@ public class InputReader
         return new Warehouse(id, coordinate, products);
     }
     
-    private Order readOrder(Scanner in)
+    private Order readOrder(int id, Scanner in)
     {
         Coordinate coordinate = new Coordinate(in.nextInt(), in.nextInt());
         
@@ -104,7 +104,7 @@ public class InputReader
             products[productType]++;
         }
         
-        return new Order(new Customer(coordinate), products);
+        return new Order(id, new Customer(coordinate), products);
     }
 
     @Override

@@ -3,7 +3,7 @@ package domain;
 import java.util.Arrays;
 
 
-public class Warehouse {
+public class Warehouse implements Destinations{
     private int wareHouseID;
     private Coordinate coords;
     private int[] products; // index on producttype
@@ -43,6 +43,16 @@ public class Warehouse {
 
     public void setProducts(int[] products) {
         this.products = products;
+    }
+
+    @Override
+    public int getId() {
+        return wareHouseID;
+    }
+
+    @Override
+    public Coordinate getCoordinate() {
+        return this.coords;
     }
     
     
