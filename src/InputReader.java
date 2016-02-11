@@ -1,6 +1,7 @@
 
 import domain.Coordinate;
 import domain.Customer;
+import domain.Drone;
 import domain.Map;
 import domain.Order;
 import domain.Product;
@@ -16,7 +17,7 @@ public class InputReader
 {
     private int rows;
     private int cols;
-    private int drones;
+    private int numOfDrones;
     private int turns;
     private int payload;
     private int numOfProductTypes;
@@ -26,18 +27,27 @@ public class InputReader
     private List<Product> products;
     private List<Warehouse> warehouses;
     private List<Order> orders;
+    private List<Drone> drones;
+    
+    private Scanner in;
 
     public InputReader(Scanner in) throws IOException
     {
+        this.in = in;
+    }
+    
+    public domain.Map readInput()
+    {
         rows = in.nextInt();
         cols = in.nextInt();
-        drones = in.nextInt();
+        numOfDrones = in.nextInt();
         turns = in.nextInt();
         payload = in.nextInt();
         numOfProductTypes = in.nextInt();
         products = new ArrayList<>();
         warehouses = new ArrayList<>();
         orders = new ArrayList<>();
+        drones = new ArrayList<>();
         
         for (int i = 0; i < numOfProductTypes; i++)
         {
@@ -51,12 +61,20 @@ public class InputReader
             warehouses.add(readWarehouse(i, in));
         }
         
+        
+        for(int i = 0; i < numOfDrones; i++)
+        {
+            drones.add(new Drone(warehouses.get(0).getCoords(),payload, numOfProductTypes));
+        }
+        
         numOfOrders = in.nextInt();
         
         for (int i = 0; i < numOfOrders; i++)
         {
             orders.add(readOrder(in));
         }
+        
+        return new Map(rows, cols, warehouses, orders, drones);
     }
 
     private Warehouse readWarehouse(int id, Scanner in)
@@ -91,7 +109,7 @@ public class InputReader
 
     @Override
     public String toString() {
-        return "InputReader{" + "rows=" + rows + ", cols=" + cols + ", drones=" + drones + ", turns=" + turns + ", payload=" + payload + ", numOfProductTypes=" + numOfProductTypes + ", numOfWarehouses=" + numOfWarehouses + ", numOfOrders=" + numOfOrders + ", products=" + products + ", warehouses=" + warehouses + ", orders=" + orders + '}';
+        return "InputReader{" + "rows=" + rows + ", cols=" + cols + ", drones=" + numOfDrones + ", turns=" + turns + ", payload=" + payload + ", numOfProductTypes=" + numOfProductTypes + ", numOfWarehouses=" + numOfWarehouses + ", numOfOrders=" + numOfOrders + ", products=" + products + ", warehouses=" + warehouses + ", orders=" + orders + '}';
     }
 
   
