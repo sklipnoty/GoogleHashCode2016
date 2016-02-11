@@ -8,15 +8,25 @@ public class Map {
     public List<Warehouse> warehouses;
     public List<Order> orders;
     public List<Drone> drones;
+    private List<Product> products;
 
-    public Map(int rows, int cols, List<Warehouse> warehouses, List<Order> orders, List<Drone> drones) {
+    public Map(int rows, int cols, List<Warehouse> warehouses, List<Order> orders, List<Drone> drones, List<Product> products) {
         this.rows = rows;
         this.cols = cols;
         this.warehouses = warehouses;
         this.orders = orders;
         this.drones = drones;
+        this.products = products;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+    
     public int getRows() {
         return rows;
     }
@@ -59,7 +69,7 @@ public class Map {
     
     public int moveDrone(Drone drone, Coordinate coordinate)
     {
-        int result = move(drone.getCoords(), coordinate);
+        int result = distance(drone.getCoords(), coordinate);
         if(result != -1)
         {
             drone.setCoords(coordinate);
@@ -67,7 +77,7 @@ public class Map {
         return result;
     }
     
-    public int move(Coordinate startCoordinate, Coordinate destinationCoordinate)
+    public int distance(Coordinate startCoordinate, Coordinate destinationCoordinate)
     {
         if(destinationCoordinate.getX() < 0 || destinationCoordinate.getY() < 0 || destinationCoordinate.getX() >= cols || destinationCoordinate.getY() >= rows)
         {

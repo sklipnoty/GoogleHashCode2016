@@ -16,6 +16,23 @@ public class MapSimulator {
     public MapSimulator() {
 
     }
+    
+    public static Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, List<Warehouse> warehouses) {
+        Warehouse closestWarehouse = null;
+        
+        for (Warehouse w : warehouses) {
+            if (closestWarehouse == null) {
+                closestWarehouse = w;
+            } else {
+                if (map.distance(startWarehouse.getCoords(), w.getCoords()) 
+                        < map.distance(closestWarehouse.getCoords(), w.getCoords())) {
+                    closestWarehouse = w;
+                }
+            }
+        }
+        
+        return closestWarehouse;
+    }
 
     @Override
     public String toString() {
@@ -31,7 +48,7 @@ public class MapSimulator {
             int smallest = 0;
             Warehouse bestWarehouse = null;
             for (Warehouse warehouse : map.getWarehouses()) {
-                int distance = map.move(warehouse.getCoords(), order.getCustomer().getCoordinate());
+                int distance = map.distance(warehouse.getCoords(), order.getCustomer().getCoordinate());
 
                 if (smallest == 0) {
                     smallest = distance;
@@ -87,14 +104,40 @@ public class MapSimulator {
                       //maak vlieg order.
                      while(availDrones.peek() != null) {
                          Drone availDr = availDrones.poll();
-                        
-                         
+                         Warehouse ware = findClosestWarehouseForItem(map, house, map.getWarehouses());
+                         map.moveDrone(availDr, ware.getCoords());
+                         int number = availDr.loadProduct(map.getProducts().get(i), needed[i]);
+                         needed[i] -= number;
+                         map.moveDrone(availDr, house.getCoords());
+                         availDr.unloadProduct(map.getProducts().get(i), number);
                      }
                   }
               }
+              
+              neededProducts.remove(house);
           }
         }
 
+        
+        //deliver all products. 
+        for(Warehouse house : map.getWarehouses()) {
+            for(Drone drone : map.getDrones()) {
+               if(!(drone.getCoords() == house.getCoords())) {
+                   map.moveDrone(drone, house.getCoords());
+               }
+            }
+            
+            List<Order> ord = orders.get(house);
+            
+            for(Order o : ord) {
+                for(Drone drone : map.getDrones()) {
+                    drone.order(o, map);
+                }
+            }
+            
+            
+        }
+        
     }
 
 }
