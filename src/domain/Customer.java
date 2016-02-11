@@ -14,6 +14,11 @@ public class Customer {
     public void setCoordinate(Coordinate deliveryCell) {
         this.deliveryCell = deliveryCell;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" + "deliveryCell=" + deliveryCell + '}';
+    }
     
     
 }

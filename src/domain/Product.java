@@ -24,6 +24,11 @@ public class Product {
     public void setUnits(int units) {
         this.units = units;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" + "type=" + type + ", units=" + units + '}';
+    }
     
     
 }

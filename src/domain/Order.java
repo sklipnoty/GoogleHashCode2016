@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +29,10 @@ public class Order {
         this.products = products;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" + "customer=" + customer + ", products=" + Arrays.toString(products) + '}';
+    }
 
+    
 }

@@ -1,7 +1,7 @@
 package domain;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
+
 
 public class Warehouse {
     private int wareHouseID;
@@ -17,6 +17,13 @@ public class Warehouse {
     public int getWareHouseID() {
         return wareHouseID;
     }
+
+    @Override
+    public String toString() {
+        return "Warehouse{" + "wareHouseID=" + wareHouseID + ", coords=" + coords + ", products=" + Arrays.toString(products) + '}';
+    }
+
+
 
     public void setWareHouseID(int wareHouseID) {
         this.wareHouseID = wareHouseID;

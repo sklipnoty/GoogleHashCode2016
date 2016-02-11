@@ -1,18 +1,19 @@
 package domain;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.Arrays;
+
+
 
 public class Drone {
     private Coordinate currentLocation;
     private int maxUnits;
-    private List<Product> products;
+    private int[] products;
     private int currentUnits;
 
-    public Drone(Coordinate coords, int maxUnits, List<Product> products) {
+    public Drone(Coordinate coords, int maxUnits, int numOfProductTypes) {
         this.currentLocation = coords;
         this.maxUnits = maxUnits;
-        this.products = products;
+        this.products = new int[numOfProductTypes];
     }
     
     public Coordinate getCoords() {
@@ -31,19 +32,21 @@ public class Drone {
         this.maxUnits = maxUnits;
     }
 
-    public List<Product> getProducts() {
+    public int[] getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(int[] products) {
         this.products = products;
-    }  
+    }
+
+
     
     public boolean loadProduct(Product product)
     {
         if(currentUnits + product.getUnits() <= maxUnits)
         {
-            products.add(product);
+            products[product.getType()]++;
             currentUnits += product.getUnits();
             return true;
         }
@@ -52,21 +55,13 @@ public class Drone {
     
     public boolean unloadProduct(Product product)
     {
-        Iterator<Product> it = products.iterator();
-        Product p;
-        boolean result = false;
-        while(it.hasNext())
+        if(products[product.getType()] > 0)
         {
-            p = it.next();
-            if(p.getType() == product.getType())
-            {
-                it.remove();
-                currentUnits -= p.getUnits();
-                result = true;
-                break;
-            }
+            products[product.getType()]--;
+            currentUnits -= product.getUnits();
+            return true;
         }
-        return result;
+        return false;
     }
     
     public int unloadProduct(Product product, int amount)
@@ -94,4 +89,11 @@ public class Drone {
         }
         return i;
     }
+
+    @Override
+    public String toString() {
+        return "Drone{" + "currentLocation=" + currentLocation + ", maxUnits=" + maxUnits + ", products=" + Arrays.toString(products) + ", currentUnits=" + currentUnits + '}';
+    }
+    
+    
 }
