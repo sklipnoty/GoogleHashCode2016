@@ -17,10 +17,15 @@ public class MapSimulator {
 
     }
     
-    public static Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, List<Warehouse> warehouses) {
+    public static Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, List<Warehouse> warehouses, int productType) {
         Warehouse closestWarehouse = null;
         
         for (Warehouse w : warehouses) {
+            
+            if (w.getProducts()[productType] > 0) {
+                continue;
+            }
+            
             if (closestWarehouse == null) {
                 closestWarehouse = w;
             } else {
@@ -104,9 +109,10 @@ public class MapSimulator {
                       //maak vlieg order.
                      while(availDrones.peek() != null) {
                          Drone availDr = availDrones.poll();
-                         Warehouse ware = findClosestWarehouseForItem(map, house, map.getWarehouses());
+                         Warehouse ware = findClosestWarehouseForItem(map, house, map.getWarehouses(), i);
                          map.moveDrone(availDr, ware.getCoords());
                          int number = availDr.loadProduct(map.getProducts().get(i), needed[i]);
+                         house.reduceAvailability(i, number);
                          needed[i] -= number;
                          map.moveDrone(availDr, house.getCoords());
                          availDr.unloadProduct(map.getProducts().get(i), number);

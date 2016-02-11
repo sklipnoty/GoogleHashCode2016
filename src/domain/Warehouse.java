@@ -55,7 +55,10 @@ public class Warehouse implements Destinations{
         return this.coords;
     }
     
-    
+    public void reduceAvailability(int productType, int amount) {
+        if (amount > 0 && products[productType] > 0)
+            products[productType] -= amount;
+    }
     
     
 }
