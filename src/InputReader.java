@@ -62,11 +62,11 @@ public class InputReader
     private Warehouse readWarehouse(int id, Scanner in)
     {
         Coordinate coordinate = new Coordinate(in.nextInt(), in.nextInt());
-        List<Integer> products = new ArrayList<Integer>();
+        int[] products = new int[numOfProductTypes];
         
         for (int i = 0; i < numOfProductTypes; i++)
         {
-            products.add(in.nextInt());
+            products[i] = in.nextInt();
         }
         
         return new Warehouse(id, coordinate, products);
