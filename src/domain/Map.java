@@ -59,7 +59,12 @@ public class Map {
     
     public int moveDrone(Drone drone, Coordinate coordinate)
     {
-        return move(drone.getCoords(), coordinate);
+        int result = move(drone.getCoords(), coordinate);
+        if(result != -1)
+        {
+            drone.setCoords(coordinate);
+        }
+        return result;
     }
     
     public int move(Coordinate startCoordinate, Coordinate destinationCoordinate)
