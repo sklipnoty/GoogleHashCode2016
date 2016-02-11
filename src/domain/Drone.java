@@ -94,6 +94,11 @@ public class Drone {
     public String toString() {
         return "Drone{" + "currentLocation=" + currentLocation + ", maxUnits=" + maxUnits + ", products=" + Arrays.toString(products) + ", currentUnits=" + currentUnits + '}';
     }
+
+    public void order(Order order, Map map) {
+        
+        
+    }
     
     
 }

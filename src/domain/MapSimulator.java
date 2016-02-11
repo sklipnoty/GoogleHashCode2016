@@ -130,7 +130,9 @@ public class MapSimulator {
             List<Order> ord = orders.get(house);
             
             for(Order o : ord) {
-                
+                for(Drone drone : map.getDrones()) {
+                    drone.order(o, map);
+                }
             }
             
             
