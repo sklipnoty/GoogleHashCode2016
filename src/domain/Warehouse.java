@@ -6,9 +6,9 @@ import java.util.Map;
 public class Warehouse {
     private int wareHouseID;
     private Coordinate coords;
-    private List<Integer> products; // index on producttype
+    private int[] products; // index on producttype
 
-    public Warehouse(int wareHouseID, Coordinate coords, List<Integer> products) {
+    public Warehouse(int wareHouseID, Coordinate coords, int[] products) {
         this.wareHouseID = wareHouseID;
         this.coords = coords;
         this.products = products;
@@ -30,13 +30,14 @@ public class Warehouse {
         this.coords = coords;
     }
 
-    public List<Integer> getProducts() {
+    public int[] getProducts() {
         return products;
     }
 
-    public void setProducts(List<Integer> products) {
+    public void setProducts(int[] products) {
         this.products = products;
     }
+    
     
     
     
