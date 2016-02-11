@@ -120,6 +120,22 @@ public class MapSimulator {
 
         
         //deliver all products. 
+        for(Warehouse house : map.getWarehouses()) {
+            for(Drone drone : map.getDrones()) {
+               if(!(drone.getCoords() == house.getCoords())) {
+                   map.moveDrone(drone, house.getCoords());
+               }
+            }
+            
+            List<Order> ord = orders.get(house);
+            
+            for(Order o : ord) {
+                
+            }
+            
+            
+        }
+        
     }
 
 }
