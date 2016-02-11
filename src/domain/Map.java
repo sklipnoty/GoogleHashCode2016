@@ -67,12 +67,12 @@ public class Map {
         this.drones = drones;
     }
     
-    public int moveDrone(Drone drone, Coordinate coordinate)
+    public int moveDrone(Drone drone, Destinations dest)
     {
-        int result = distance(drone.getCoords(), coordinate);
+        int result = distance(drone.getCoords(), dest.getCoordinate());
         if(result != -1)
         {
-            drone.setCoords(coordinate);
+            drone.setCoords(dest.getCoordinate());
         }
         return result;
     }

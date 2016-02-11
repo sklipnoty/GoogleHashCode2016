@@ -46,5 +46,10 @@ public class Order implements Destinations{
         return this.customer.getCoordinate();
     }
 
+    @Override
+    public int getType() {
+        return 0;
+    }
+
     
 }

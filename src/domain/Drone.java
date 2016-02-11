@@ -89,9 +89,9 @@ public class Drone {
             while (order.getProducts()[i] > 0) {
                 int number = this.loadProduct(map.getProducts().get(i), order.getProducts()[i]);
                 order.getProducts()[i] -= number;
-                map.moveDrone(this, order.getCustomer().getCoordinate());
+                map.moveDrone(this, order);
                 this.unloadProduct(map.getProducts().get(i), number);
-                map.moveDrone(this, warehouse.getCoords());
+                map.moveDrone(this, warehouse);
             }
         }
     }

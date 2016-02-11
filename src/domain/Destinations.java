@@ -12,4 +12,5 @@ package domain;
 public interface Destinations {
     public int getId();
     public Coordinate getCoordinate();
+    public int getType();
 }

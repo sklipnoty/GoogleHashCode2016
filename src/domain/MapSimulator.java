@@ -114,7 +114,7 @@ public class MapSimulator {
                          int number = availDr.loadProduct(map.getProducts().get(i), needed[i]);
                          house.reduceAvailability(i, number);
                          needed[i] -= number;
-                         map.moveDrone(availDr, house.getCoords());
+                         map.moveDrone(availDr, house);
                          availDr.unloadProduct(map.getProducts().get(i), number);
                      }
                   }
@@ -129,7 +129,7 @@ public class MapSimulator {
         for(Warehouse house : map.getWarehouses()) {
             for(Drone drone : map.getDrones()) {
                if(!(drone.getCoords() == house.getCoords())) {
-                   map.moveDrone(drone, house.getCoords());
+                   map.moveDrone(drone, house);
                }
             }
             
