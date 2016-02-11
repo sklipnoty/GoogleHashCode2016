@@ -1,12 +1,13 @@
 package domain;
 
+import java.util.List;
 import java.util.Map;
 
 public class Order {
     private Customer customer;
-    private Map<Product, Integer> products; 
+    private int[] products; 
 
-    public Order(Customer customer, Map<Product, Integer> products) {
+    public Order(Customer customer, int[] products) {
         this.customer = customer;
         this.products = products;
     }
@@ -19,13 +20,13 @@ public class Order {
         this.customer = customer;
     }
 
-    public Map<Product, Integer> getProducts() {
+    public int[] getProducts() {
         return products;
     }
 
-    public void setProducts(Map<Product, Integer> products) {
+    public void setProducts(int[] products) {
         this.products = products;
     }
-    
-    
+
+
 }
