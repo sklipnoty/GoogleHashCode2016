@@ -1,18 +1,18 @@
 package domain;
 
 public class Customer {
-    private Coordinate coordinate;
+    private Coordinate deliveryCell;
 
     public Customer(Coordinate coordinate) {
-        this.coordinate = coordinate;
+        this.deliveryCell = coordinate;
     }
 
     public Coordinate getCoordinate() {
-        return coordinate;
+        return deliveryCell;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    public void setCoordinate(Coordinate deliveryCell) {
+        this.deliveryCell = deliveryCell;
     }
     
     
