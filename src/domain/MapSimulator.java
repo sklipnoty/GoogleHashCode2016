@@ -110,7 +110,7 @@ public class MapSimulator {
                      while(availDrones.peek() != null) {
                          Drone availDr = availDrones.poll();
                          Warehouse ware = findClosestWarehouseForItem(map, house, map.getWarehouses(), i);
-                         map.moveDrone(availDr, ware.getCoords());
+                         map.moveDrone(availDr, ware);
                          int number = availDr.loadProduct(map.getProducts().get(i), needed[i]);
                          house.reduceAvailability(i, number);
                          needed[i] -= number;

@@ -8,8 +8,9 @@ public class StartUp
 {
     public static void main(String[] args) throws IOException
     {
-        Scanner in = new Scanner(new File("input/example.in"));
+        Scanner in = new Scanner(new File("input/mother_of_all_warehouses.in"));
         InputReader reader = new InputReader(in);
+        reader.readInput();
         System.out.println(reader.toString());
     }
 }
