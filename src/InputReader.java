@@ -36,7 +36,9 @@ public class InputReader
         payload = in.nextInt();
         numOfProductTypes = in.nextInt();
         products = new ArrayList<>();
-
+        warehouses = new ArrayList<>();
+        orders = new ArrayList<>();
+        
         for (int i = 0; i < numOfProductTypes; i++)
         {
             products.add(new Product(i, in.nextInt()));
@@ -76,7 +78,7 @@ public class InputReader
         
         int numOfItems = in.nextInt();
         
-        int[] products = new int[numOfItems];
+        int[] products = new int[numOfProductTypes];
         
         for (int i = 0; i < numOfItems; i++)
         {
@@ -88,8 +90,9 @@ public class InputReader
     }
 
     @Override
-    public String toString()
-    {
-        return "InputReader{" + "rows=" + rows + ", cols=" + cols + ", drones=" + drones + ", turns=" + turns + ", payload=" + payload + ", numOfProductTypes=" + numOfProductTypes + '}';
+    public String toString() {
+        return "InputReader{" + "rows=" + rows + ", cols=" + cols + ", drones=" + drones + ", turns=" + turns + ", payload=" + payload + ", numOfProductTypes=" + numOfProductTypes + ", numOfWarehouses=" + numOfWarehouses + ", numOfOrders=" + numOfOrders + ", products=" + products + ", warehouses=" + warehouses + ", orders=" + orders + '}';
     }
+
+  
 }

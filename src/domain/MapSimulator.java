@@ -15,6 +15,11 @@ public class MapSimulator {
 
     }
 
+    @Override
+    public String toString() {
+        return "MapSimulator{" + '}';
+    }
+
     public void solveMap(Map map) {
 
         HashMap<Warehouse, List<Order>> orders = new HashMap<>();

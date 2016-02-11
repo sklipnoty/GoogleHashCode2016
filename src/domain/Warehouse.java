@@ -18,6 +18,11 @@ public class Warehouse {
         return wareHouseID;
     }
 
+    @Override
+    public String toString() {
+        return "Warehouse{" + "wareHouseID=" + wareHouseID + ", coords=" + coords + ", products=" + products + '}';
+    }
+
     public void setWareHouseID(int wareHouseID) {
         this.wareHouseID = wareHouseID;
     }

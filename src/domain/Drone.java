@@ -94,4 +94,11 @@ public class Drone {
         }
         return i;
     }
+
+    @Override
+    public String toString() {
+        return "Drone{" + "currentLocation=" + currentLocation + ", maxUnits=" + maxUnits + ", products=" + products + ", currentUnits=" + currentUnits + '}';
+    }
+    
+    
 }

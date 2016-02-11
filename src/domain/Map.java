@@ -82,5 +82,10 @@ public class Map {
                 )
         );
     }
+
+    @Override
+    public String toString() {
+        return "Map{" + "rows=" + rows + ", cols=" + cols + ", warehouses=" + warehouses + ", orders=" + orders + ", drones=" + drones + '}';
+    }
    
 }
