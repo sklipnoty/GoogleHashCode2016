@@ -4,13 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Order {
+public class Order implements Destinations{
     private Customer customer;
-    private int[] products; 
+    private int[] products;
+    private int id;
 
-    public Order(Customer customer, int[] products) {
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public Order(int id, Customer customer, int[] products) {
         this.customer = customer;
         this.products = products;
+        this.id = id;
     }
 
     public Customer getCustomer() {
@@ -32,6 +39,11 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" + "customer=" + customer + ", products=" + Arrays.toString(products) + '}';
+    }
+
+    @Override
+    public Coordinate getCoordinate() {
+        return this.customer.getCoordinate();
     }
 
     
