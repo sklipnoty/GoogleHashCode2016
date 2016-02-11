@@ -1,5 +1,6 @@
 
 import domain.Map;
+import domain.MapSimulator;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -10,7 +11,9 @@ public class StartUp
     {
         Scanner in = new Scanner(new File("input/mother_of_all_warehouses.in"));
         InputReader reader = new InputReader(in);
-        reader.readInput();
+        Map map = reader.readInput();
+        MapSimulator mapSim = new MapSimulator();
+        mapSim.solveMap(map);
         System.out.println(reader.toString());
     }
 }

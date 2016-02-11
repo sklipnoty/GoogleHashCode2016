@@ -6,6 +6,7 @@
 package domain;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -53,6 +54,10 @@ public class MapSimulator {
             int smallest = 0;
             Warehouse bestWarehouse = null;
             for (Warehouse warehouse : map.getWarehouses()) {
+                if(orders.get(warehouse) == null) {
+                    orders.put(warehouse, new ArrayList<>());
+                }
+                
                 int distance = map.distance(warehouse.getCoords(), order.getCustomer().getCoordinate());
 
                 if (smallest == 0) {
