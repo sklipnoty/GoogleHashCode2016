@@ -54,6 +54,11 @@ public class Warehouse implements Destinations{
     public Coordinate getCoordinate() {
         return this.coords;
     }
+
+    @Override
+    public int getType() {
+        return 1;
+    }
     
     
     

@@ -105,10 +105,10 @@ public class MapSimulator {
                      while(availDrones.peek() != null) {
                          Drone availDr = availDrones.poll();
                          Warehouse ware = findClosestWarehouseForItem(map, house, map.getWarehouses());
-                         map.moveDrone(availDr, ware.getCoords());
+                         map.moveDrone(availDr, ware);
                          int number = availDr.loadProduct(map.getProducts().get(i), needed[i]);
                          needed[i] -= number;
-                         map.moveDrone(availDr, house.getCoords());
+                         map.moveDrone(availDr, house);
                          availDr.unloadProduct(map.getProducts().get(i), number);
                      }
                   }
@@ -123,7 +123,7 @@ public class MapSimulator {
         for(Warehouse house : map.getWarehouses()) {
             for(Drone drone : map.getDrones()) {
                if(!(drone.getCoords() == house.getCoords())) {
-                   map.moveDrone(drone, house.getCoords());
+                   map.moveDrone(drone, house);
                }
             }
             
