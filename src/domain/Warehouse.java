@@ -1,13 +1,14 @@
 package domain;
 
+import java.util.List;
 import java.util.Map;
 
 public class Warehouse {
     private int wareHouseID;
     private Coordinate coords;
-    private Map<Product, Integer> products; 
+    private List<Integer> products; // index on producttype
 
-    public Warehouse(int wareHouseID, Coordinate coords, Map<Product, Integer> products) {
+    public Warehouse(int wareHouseID, Coordinate coords, List<Integer> products) {
         this.wareHouseID = wareHouseID;
         this.coords = coords;
         this.products = products;
@@ -29,11 +30,11 @@ public class Warehouse {
         this.coords = coords;
     }
 
-    public Map<Product, Integer> getProducts() {
+    public List<Integer> getProducts() {
         return products;
     }
 
-    public void setProducts(Map<Product, Integer> products) {
+    public void setProducts(List<Integer> products) {
         this.products = products;
     }
     
