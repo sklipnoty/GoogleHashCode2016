@@ -59,24 +59,7 @@ public class Map {
     
     public int moveDrone(Drone drone, Coordinate coordinate)
     {
-        if(coordinate.getX() < 0 || coordinate.getY() < 0 || coordinate.getX() >= cols || coordinate.getY() >= rows)
-        {
-            return -1;
-        }
-        return (int) Math.ceil(
-                Math.sqrt(
-                        Math.pow(
-                                Math.abs(
-                                        drone.getCoords().getX() - coordinate.getX()
-                                ), 2) 
-                                        + 
-                        Math.pow(
-                                Math.abs(
-                                        drone.getCoords().getY() - coordinate.getY()
-                                ), 2
-                        ) 
-                )
-        );
+        return move(drone.getCoords(), coordinate);
     }
     
     public int move(Coordinate startCoordinate, Coordinate destinationCoordinate)
