@@ -78,5 +78,21 @@ public class Map {
                 )
         );
     }
+    
+    public int move(Coordinate startCoordinate, Coordinate destinationCoordinate)
+    {
+        if(destinationCoordinate.getX() < 0 || destinationCoordinate.getY() < 0 || destinationCoordinate.getX() >= cols || destinationCoordinate.getY() >= rows)
+        {
+            return -1;
+        }
+        return (int) Math.ceil(Math.sqrt(Math.pow(Math.abs(startCoordinate.getX() - destinationCoordinate.getX()
+                                ), 2) 
+                                        + 
+                        Math.pow(Math.abs(startCoordinate.getY() - destinationCoordinate.getY()
+                                ), 2
+                        ) 
+                )
+        );
+    }
    
 }
