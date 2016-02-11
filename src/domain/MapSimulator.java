@@ -5,9 +5,11 @@
  */
 package domain;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class MapSimulator {
 
@@ -69,7 +71,29 @@ public class MapSimulator {
 
         }
         
+        Queue<Drone> availDrones = new ArrayDeque<>();
         
+        for(int i = 0; i < map.getDrones().size(); i++) {
+            availDrones.add(map.getDrones().get(i));
+        }
+       
+        // drones shit laten rondvliegen
+        while(!neededProducts.isEmpty()) {
+          for(Warehouse house : map.getWarehouses()) {
+              int[] needed = neededProducts.get(house);
+              
+              for(int i = 0; i < needed.length; i++) {
+                  while(needed[i] > 0 ) {
+                      //maak vlieg order.
+                     while(availDrones.peek() != null) {
+                         Drone availDr = availDrones.poll();
+                        
+                         
+                     }
+                  }
+              }
+          }
+        }
 
     }
 
