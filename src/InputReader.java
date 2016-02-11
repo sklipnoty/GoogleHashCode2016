@@ -74,7 +74,7 @@ public class InputReader
             orders.add(readOrder(in));
         }
         
-        return new Map(rows, cols, warehouses, orders, drones);
+        return new Map(rows, cols, warehouses, orders, drones, products);
     }
 
     private Warehouse readWarehouse(int id, Scanner in)

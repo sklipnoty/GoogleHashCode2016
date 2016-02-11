@@ -8,15 +8,25 @@ public class Map {
     public List<Warehouse> warehouses;
     public List<Order> orders;
     public List<Drone> drones;
+    private List<Product> products;
 
-    public Map(int rows, int cols, List<Warehouse> warehouses, List<Order> orders, List<Drone> drones) {
+    public Map(int rows, int cols, List<Warehouse> warehouses, List<Order> orders, List<Drone> drones, List<Product> products) {
         this.rows = rows;
         this.cols = cols;
         this.warehouses = warehouses;
         this.orders = orders;
         this.drones = drones;
+        this.products = products;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+    
     public int getRows() {
         return rows;
     }
