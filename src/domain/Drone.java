@@ -2,9 +2,8 @@ package domain;
 
 import java.util.Arrays;
 
-
-
 public class Drone {
+
     private Coordinate currentLocation;
     private int maxUnits;
     private int[] products;
@@ -15,7 +14,7 @@ public class Drone {
         this.maxUnits = maxUnits;
         this.products = new int[numOfProductTypes];
     }
-    
+
     public Coordinate getCoords() {
         return currentLocation;
     }
@@ -40,50 +39,38 @@ public class Drone {
         this.products = products;
     }
 
-
-    
-    public boolean loadProduct(Product product)
-    {
-        if(currentUnits + product.getUnits() <= maxUnits)
-        {
+    public boolean loadProduct(Product product) {
+        if (currentUnits + product.getUnits() <= maxUnits) {
             products[product.getType()]++;
             currentUnits += product.getUnits();
             return true;
         }
         return false;
     }
-    
-    public boolean unloadProduct(Product product)
-    {
-        if(products[product.getType()] > 0)
-        {
+
+    public boolean unloadProduct(Product product) {
+        if (products[product.getType()] > 0) {
             products[product.getType()]--;
             currentUnits -= product.getUnits();
             return true;
         }
         return false;
     }
-    
-    public int unloadProduct(Product product, int amount)
-    {
+
+    public int unloadProduct(Product product, int amount) {
         int i = 0;
-        for(;i < amount; i++)
-        {
-            if(!unloadProduct(product))
-            {
+        for (; i < amount; i++) {
+            if (!unloadProduct(product)) {
                 break;
             }
         }
         return i;
     }
-    
-    public int loadProduct(Product product, int amount)
-    {
+
+    public int loadProduct(Product product, int amount) {
         int i = 0;
-        for(;i < amount; i++)
-        {
-            if(!loadProduct(product))
-            {
+        for (; i < amount; i++) {
+            if (!loadProduct(product)) {
                 break;
             }
         }
@@ -95,10 +82,18 @@ public class Drone {
         return "Drone{" + "currentLocation=" + currentLocation + ", maxUnits=" + maxUnits + ", products=" + Arrays.toString(products) + ", currentUnits=" + currentUnits + '}';
     }
 
-    public void order(Order order, Map map) {
+    public void order(Order order, Warehouse warehouse, Map map) {
+        int[] products = order.getProducts();
         
-        
+        for (int i = 0; i < products.length; i++) {
+            while (order.getProducts()[i] > 0) {
+                int number = this.loadProduct(map.getProducts().get(i), order.getProducts()[i]);
+                order.getProducts()[i] -= number;
+                map.moveDrone(this, order.getCustomer().getCoordinate());
+                this.unloadProduct(map.getProducts().get(i), number);
+                map.moveDrone(this, warehouse.getCoords());
+            }
+        }
     }
-    
-    
+
 }

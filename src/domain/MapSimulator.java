@@ -131,7 +131,7 @@ public class MapSimulator {
             
             for(Order o : ord) {
                 for(Drone drone : map.getDrones()) {
-                    drone.order(o, map);
+                    drone.order(o,house, map);
                 }
             }
             
