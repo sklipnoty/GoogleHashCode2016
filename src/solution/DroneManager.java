@@ -14,7 +14,7 @@ public class DroneManager {
     private List<Drone> drones;
     private List<String> commands;
     private OutputWriter output;
-    
+
     public DroneManager(Map map) {
         this.map = map;
         this.drones = map.getDrones();
@@ -26,7 +26,7 @@ public class DroneManager {
         //    System.out.println("Picking from [" + provider.getWareHouseID() + " to " + requester.getWareHouseID() + "] type : " + productType + " amount : " + numberOfSteal);
         String loadCommand = makeLineLoadCommand(0, provider.getWareHouseID(), productType, numberOfSteal);
         commands.add(loadCommand);
-        String unloadCommand = makeLineLoadCommand(0, requester.getWareHouseID(), productType, numberOfSteal);
+        String unloadCommand = makeLineUnloadCommand(0, requester.getWareHouseID(), productType, numberOfSteal);
         commands.add(unloadCommand);
         return numberOfSteal;
     }
@@ -64,13 +64,18 @@ public class DroneManager {
         } else {
             //load up everything for order and deliver.
             for (int i = 0; i < neededItems.length; i++) {
-                String load = makeLineLoadCommand(0, warehouse.getId(), i, neededItems[i]);
-                commands.add(load);
+                if (neededItems[i] > 0) {
+
+                    String load = makeLineLoadCommand(0, warehouse.getId(), i, neededItems[i]);
+                    commands.add(load);
+                }
             }
 
             for (int i = 0; i < neededItems.length; i++) {
-                String deliver = makeLineDeliverCommand(0, order.getId(), i, neededItems[i]);
-                commands.add(deliver);
+                if (neededItems[i] > 0) {
+                    String deliver = makeLineDeliverCommand(0, order.getId(), i, neededItems[i]);
+                    commands.add(deliver);
+                }
             }
         }
 

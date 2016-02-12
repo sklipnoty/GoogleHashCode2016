@@ -60,6 +60,7 @@ public class WarehouseManager {
 
     public void makeOrderList() {
         for (Order order : map.getOrders()) {
+            
             int smallest = 0;
             Warehouse bestWarehouse = null;
             for (Warehouse warehouse : map.getWarehouses()) {
