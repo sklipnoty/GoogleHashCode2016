@@ -23,8 +23,6 @@ public class Warehouse implements Destinations{
         return "Warehouse{" + "wareHouseID=" + wareHouseID + ", coords=" + coords + ", products=" + Arrays.toString(products) + '}';
     }
 
-
-
     public void setWareHouseID(int wareHouseID) {
         this.wareHouseID = wareHouseID;
     }
@@ -71,6 +69,22 @@ public class Warehouse implements Destinations{
         hash = 23 * hash + this.wareHouseID;
         return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Warehouse other = (Warehouse) obj;
+        if (this.wareHouseID != other.wareHouseID) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
 }

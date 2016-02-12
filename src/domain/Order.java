@@ -4,20 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Order implements Destinations{
+public class Order {
+
     private Customer customer;
     private int[] products;
     private int id;
-
-    @Override
-    public int getId() {
-        return id;
-    }
 
     public Order(int id, Customer customer, int[] products) {
         this.customer = customer;
         this.products = products;
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Customer getCustomer() {
@@ -36,20 +36,22 @@ public class Order implements Destinations{
         this.products = products;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Order{" + "customer=" + customer + ", products=" + Arrays.toString(products) + '}';
     }
-
-    @Override
-    public Coordinate getCoordinate() {
-        return this.customer.getCoordinate();
-    }
-
-    @Override
-    public int getType() {
-        return 0;
-    }
-
     
+    // This is the biggest hack ever. Why mathias? Why remove the map? It made sense ...
+    public int getUnits(List<Product> prod) {
+        int units = 0;
+        for(int i = 0; i < products.length; i++) {
+            units += (products[i]*prod.get(i).getUnits());
+        }
+        return units;
+    }
+
 }

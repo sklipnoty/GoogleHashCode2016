@@ -18,10 +18,12 @@ public class WarehouseManager {
     public WarehouseManager(Map map) {
         this.warehouse = map.getWarehouses();
         this.map = map;
-        this.droneManager = new DroneManager();
+        this.droneManager = new DroneManager(map);
         makeOrderList();
         calculateNeededProducts();
         redistributeProducts();
+        deliverOrders();
+        this.droneManager.makeOutput();
     }
 
     public void redistributeProducts() {
@@ -36,7 +38,16 @@ public class WarehouseManager {
 
                     while (numberOfNeededProducts > 0) {
                         Warehouse provider = findClosestWarehouseForItem(map, warehouse, i);
-                        int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, need[i]);
+                        int pickup = 0;
+                        int numberOfAvail = Math.abs(neededProducts.get(provider)[i]);
+                        int numberOfSteal = numberOfAvail - need[i];
+                     
+                        if(numberOfSteal == 0 || numberOfSteal > 0) 
+                            pickup = need[i];
+                        else 
+                            pickup = (need[i]-numberOfSteal);
+                        
+                        int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, pickup);
                         numberOfNeededProducts -= number;
                         need[i] -= number;
                     }
@@ -78,7 +89,7 @@ public class WarehouseManager {
 
         for (Warehouse w : warehouse) {
 
-            if (neededProducts.get(w) != null && neededProducts.get(w)[productType] < 0) {
+            if (startWarehouse.getWareHouseID() == w.getWareHouseID() || neededProducts.get(w) == null || neededProducts.get(w)[productType] > 0) {
                 continue;
             }
 
@@ -130,6 +141,14 @@ public class WarehouseManager {
                     System.out.print(" [" + i + "|" + avail[i] + "] ");
 
                 }
+            }
+        }
+    }
+
+    private void deliverOrders() {
+        for(Warehouse warehouse : orders.keySet()) {
+            for(Order order : orders.get(warehouse)) {
+                droneManager.deliverProduct(map,warehouse,order);
             }
         }
     }
