@@ -109,7 +109,7 @@ public class InputReader
 
     @Override
     public String toString() {
-        return "InputReader{" + "rows=" + rows + ", cols=" + cols + ", drones=" + numOfDrones + ", turns=" + turns + ", payload=" + payload + ", numOfProductTypes=" + numOfProductTypes + ", numOfWarehouses=" + numOfWarehouses + ", numOfOrders=" + numOfOrders + ", products=" + products + ", warehouses=" + warehouses + ", orders=" + orders + '}';
+        return "InputReader{" + "rows=" + rows + ", cols=" + cols + ", drones=" + numOfDrones + ", turns=" + turns + " } " ;
     }
 
   

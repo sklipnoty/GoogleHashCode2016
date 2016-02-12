@@ -64,6 +64,13 @@ public class Warehouse implements Destinations{
         if (amount > 0 && products[productType] > 0)
             products[productType] -= amount;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.wareHouseID;
+        return hash;
+    }
     
     
 }
