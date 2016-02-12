@@ -13,17 +13,37 @@ public class WarehouseManager {
     private Map map;
     private HashMap<Warehouse, List<Order>> orders = new HashMap<>();
     private HashMap<Warehouse, int[]> neededProducts = new HashMap<>();
-    private HashMap<Warehouse, int[]> availableProducts = new HashMap<>();
+    private DroneManager droneManager;
 
     public WarehouseManager(Map map) {
         this.warehouse = map.getWarehouses();
         this.map = map;
+        this.droneManager = new DroneManager();
         makeOrderList();
         calculateNeededProducts();
         redistributeProducts();
     }
 
     public void redistributeProducts() {
+        System.out.println("\n--------------------------------------");
+        for (Warehouse warehouse : neededProducts.keySet()) {
+            int[] need = neededProducts.get(warehouse);
+
+            if (need != null) { // there is a need ... now look for that need in other warehouse!
+                for (int i = 0; i < need.length; i++) {
+                    int numberOfNeededProducts = need[i];
+                    // find the closest warehouse that has this product in stock
+
+                    while (numberOfNeededProducts > 0) {
+                        Warehouse provider = findClosestWarehouseForItem(map, warehouse, i);
+                        int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, need[i]);
+                        numberOfNeededProducts -= number;
+                        need[i] -= number;
+                    }
+
+                }
+            }
+        }
 
     }
 
@@ -53,12 +73,12 @@ public class WarehouseManager {
         }
     }
 
-    public Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, List<Warehouse> warehouses, int productType) {
+    public Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, int productType) {
         Warehouse closestWarehouse = null;
 
-        for (Warehouse w : warehouses) {
+        for (Warehouse w : warehouse) {
 
-            if (w.getProducts()[productType] > 0) {
+            if (neededProducts.get(w) != null && neededProducts.get(w)[productType] < 0) {
                 continue;
             }
 
@@ -80,6 +100,7 @@ public class WarehouseManager {
 
         for (Warehouse house : orders.keySet()) {
             List<Order> totalOrders = orders.get(house);
+            System.out.println("\n Needed products for warehouse ID " + house.getId());
 
             if (totalOrders != null && totalOrders.size() > 0) {
                 int[] totalProducts = new int[totalOrders.get(0).getProducts().length];
@@ -92,18 +113,23 @@ public class WarehouseManager {
                     }
                 }
 
-                System.out.println("\n Needed products for warehouse ID " + house.getId());
-
                 //subtract avail
                 int[] avail = house.getProducts();
                 for (int i = 0; i < avail.length; i++) {
                     totalProducts[i] -= avail[i];
-                    System.out.print(" [" +i + "|" + totalProducts[i] + "] ");
-     
+                    System.out.print(" [" + i + "|" + totalProducts[i] + "] ");
+
                 }
 
                 neededProducts.put(house, totalProducts);
 
+            } else {
+                neededProducts.put(house, null);
+                int[] avail = house.getProducts();
+                for (int i = 0; i < avail.length; i++) {
+                    System.out.print(" [" + i + "|" + avail[i] + "] ");
+
+                }
             }
         }
     }

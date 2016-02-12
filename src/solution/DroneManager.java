@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package solution;
 
-/**
- *
- * @author Sklipnoty
- */
+import domain.Warehouse;
+
 public class DroneManager {
+
+    public int transferProductsFromOtherWarehouse(Warehouse requester, Warehouse provider, int productType, int numberOfProductsNeeded) {
+        int numberOfSteal = numberOfProductsNeeded - provider.getProducts()[productType];
+        return 0;
+    }
     
 }
