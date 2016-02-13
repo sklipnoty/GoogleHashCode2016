@@ -23,7 +23,7 @@ public class DroneManager {
     }
 
     public int transferProductsFromOtherWarehouse(Warehouse requester, Warehouse provider, int productType, int numberOfSteal) {
-        //    System.out.println("Picking from [" + provider.getWareHouseID() + " to " + requester.getWareHouseID() + "] type : " + productType + " amount : " + numberOfSteal);
+         System.out.println("Picking from [" + provider.getWareHouseID() + " to " + requester.getWareHouseID() + "] type : " + productType + " amount : " + numberOfSteal);
         String loadCommand = makeLineLoadCommand(0, provider.getWareHouseID(), productType, numberOfSteal);
         commands.add(loadCommand);
         String unloadCommand = makeLineUnloadCommand(0, requester.getWareHouseID(), productType, numberOfSteal);

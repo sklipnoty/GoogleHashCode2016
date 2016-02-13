@@ -37,7 +37,7 @@ public class WarehouseManager {
                     // find the closest warehouse that has this product in stock
 
                     while (numberOfNeededProducts > 0) {
-                        Warehouse provider = findClosestWarehouseForItem(map, warehouse, i);
+                        Warehouse provider = findClosestWarehouseForItem(map, warehouse, i); // deze methode moet wel iets vinden anders nullptr!
                         int pickup = 0;
                         int numberOfAvail = Math.abs(neededProducts.get(provider)[i]);
                         int numberOfSteal = numberOfAvail - need[i];
@@ -90,7 +90,7 @@ public class WarehouseManager {
 
         for (Warehouse w : warehouse) {
 
-            if (startWarehouse.getWareHouseID() == w.getWareHouseID() || neededProducts.get(w) == null || neededProducts.get(w)[productType] > 0) {
+            if (startWarehouse.getWareHouseID() == w.getWareHouseID() || neededProducts.get(w) == null || neededProducts.get(w)[productType] >= 0) {
                 continue;
             }
 
@@ -102,6 +102,11 @@ public class WarehouseManager {
                 }
             }
         }
+        
+        if(closestWarehouse == null) {
+            System.out.println("[BUG] " + startWarehouse.getId() + " search for " + productType);
+        }
+
 
         return closestWarehouse;
     }
@@ -129,7 +134,7 @@ public class WarehouseManager {
                 int[] avail = house.getProducts();
                 for (int i = 0; i < avail.length; i++) {
                     totalProducts[i] -= avail[i];
-                    System.out.print(" [" + i + "|" + totalProducts[i] + "] ");
+                    System.out.print("[" + i + "|" + totalProducts[i] + "]\t");
 
                 }
 
@@ -139,7 +144,7 @@ public class WarehouseManager {
                 neededProducts.put(house, null);
                 int[] avail = house.getProducts();
                 for (int i = 0; i < avail.length; i++) {
-                    System.out.print(" [" + i + "|" + avail[i] + "] ");
+                    System.out.print("[" + i + "|" + avail[i] + "]\t");
 
                 }
             }
