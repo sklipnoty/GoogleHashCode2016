@@ -6,6 +6,7 @@ import domain.Warehouse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class WarehouseManager {
 
@@ -80,7 +81,8 @@ public class WarehouseManager {
                 }
 
             }
-
+            
+            order.setDistanceFromWarehouse(smallest);
             orders.get(bestWarehouse).add(order);
         }
         
@@ -166,8 +168,10 @@ public class WarehouseManager {
 
     private void deliverOrders() {
         for(Warehouse warehouse : orders.keySet()) {
-            for(Order order : orders.get(warehouse)) {
-                droneManager.deliverProduct(map,warehouse,order);
+            PriorityQueue<Order> pq = new PriorityQueue<>(orders.get(warehouse));
+            while(!pq.isEmpty()) {
+                Order o = pq.poll();
+                droneManager.deliverProduct(map,warehouse,o);
             }
         }
     }

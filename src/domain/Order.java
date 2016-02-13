@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Order {
+public class Order implements Comparable<Order>{
 
     private Customer customer;
     private int[] products;
     private int id;
-
+    private int distanceFromWarehouse;
+    
     public Order(int id, Customer customer, int[] products) {
         this.customer = customer;
         this.products = products;
@@ -53,5 +54,20 @@ public class Order {
         }
         return units;
     }
+
+    public int getDistanceFromWarehouse() {
+        return distanceFromWarehouse;
+    }
+
+    public void setDistanceFromWarehouse(int distanceFromWarehouse) {
+        this.distanceFromWarehouse = distanceFromWarehouse;
+    }
+
+    @Override
+    public int compareTo(Order o) {
+        return Integer.compare(getDistanceFromWarehouse(),o.getDistanceFromWarehouse()); 
+    }
+    
+    
 
 }
