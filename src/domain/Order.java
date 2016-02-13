@@ -67,7 +67,4 @@ public class Order implements Comparable<Order>{
     public int compareTo(Order o) {
         return Integer.compare(getDistanceFromWarehouse(),o.getDistanceFromWarehouse()); 
     }
-    
-    
-
 }

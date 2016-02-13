@@ -151,4 +151,11 @@ public class DroneManager {
         incrementDrone();
     }
 
+    public void waitTillOrdersDelivered() {
+        for(int i = 0; i < drones.size(); i++) {
+            String command = makeLineWaitCommand(i, 1000);
+            commands.add(command);
+        }
+    }
+
 }

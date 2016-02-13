@@ -20,13 +20,15 @@ public class WarehouseManager {
         this.warehouse = map.getWarehouses();
         this.map = map;
         this.droneManager = new DroneManager(map);
-        
+
         makeOrderList();
         calculateNeededProducts();
+        printWarehouseStock();
         redistributeProducts();
         deliverOrders();
+        printWarehouseStock();
         this.droneManager.makeOutput();
-        
+
     }
 
     public void redistributeProducts() {
@@ -43,12 +45,13 @@ public class WarehouseManager {
                         int pickup = 0;
                         int numberOfAvail = Math.abs(neededProducts.get(provider)[i]);
                         int numberOfSteal = numberOfAvail - need[i];
-                     
-                        if(numberOfSteal == 0 || numberOfSteal > 0) 
+
+                        if (numberOfSteal == 0 || numberOfSteal > 0) {
                             pickup = need[i];
-                        else 
-                            pickup = (need[i]-Math.abs(numberOfSteal));
-                        
+                        } else {
+                            pickup = (need[i] - Math.abs(numberOfSteal));
+                        }
+
                         int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, pickup);
                         numberOfNeededProducts -= number;
                         neededProducts.get(provider)[i] += number;
@@ -81,20 +84,20 @@ public class WarehouseManager {
                 }
 
             }
-            
+
             order.setDistanceFromWarehouse(smallest);
             orders.get(bestWarehouse).add(order);
         }
-        
+
         //Debug Print of the orders of the warehouses
      /*   for(Warehouse house : orders.keySet()) {
-            System.out.println("House : " +house.getId());
-            for(Order order : orders.get(house)) {
-                System.out.print(" " + order.getId());
-            }
+         System.out.println("House : " +house.getId());
+         for(Order order : orders.get(house)) {
+         System.out.print(" " + order.getId());
+         }
             
-            System.out.println();
-        } */
+         System.out.println();
+         } */
     }
 
     public Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, int productType) {
@@ -114,11 +117,10 @@ public class WarehouseManager {
                 }
             }
         }
-        
-        if(closestWarehouse == null) {
+
+        if (closestWarehouse == null) {
             System.out.println("[BUG] " + startWarehouse.getId() + " search for " + productType);
         }
-
 
         return closestWarehouse;
     }
@@ -146,9 +148,8 @@ public class WarehouseManager {
                 int[] avail = house.getProducts();
                 for (int i = 0; i < avail.length; i++) {
                     totalProducts[i] -= avail[i];
-                    System.out.print("[" + i + "|" + totalProducts[i] + "]\t");
                 }
-                
+
                 neededProducts.put(house, totalProducts);
 
             } else {
@@ -158,21 +159,33 @@ public class WarehouseManager {
 
                 for (int i = 0; i < avail.length; i++) {
                     totalProducts[i] = -avail[i];
-                    System.out.print("[" + i + "|" + totalProducts[i] + "]\t");
                 }
-                
+
                 neededProducts.put(house, totalProducts);
             }
         }
     }
 
     private void deliverOrders() {
-        for(Warehouse warehouse : orders.keySet()) {
+
+        droneManager.waitTillOrdersDelivered();
+        for (Warehouse warehouse : orders.keySet()) {
             PriorityQueue<Order> pq = new PriorityQueue<>(orders.get(warehouse));
-            while(!pq.isEmpty()) {
+            while (!pq.isEmpty()) {
                 Order o = pq.poll();
-                droneManager.deliverProduct(map,warehouse,o);
+                droneManager.deliverProduct(map, warehouse, o);
             }
+        }
+    }
+
+    private void printWarehouseStock() {
+        for (Warehouse warehouse : neededProducts.keySet()) {
+            System.out.println("Products for : " + warehouse.getId());
+            int[] needed = neededProducts.get(warehouse);
+            for (int i = 0; i < needed.length; i++) {
+                System.out.print(String.format(" [%3d|%3d] ", i, needed[i]));
+            }
+            System.out.println("");
         }
     }
 }
