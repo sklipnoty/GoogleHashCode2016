@@ -19,11 +19,13 @@ public class WarehouseManager {
         this.warehouse = map.getWarehouses();
         this.map = map;
         this.droneManager = new DroneManager(map);
+        
         makeOrderList();
         calculateNeededProducts();
         redistributeProducts();
         deliverOrders();
         this.droneManager.makeOutput();
+        
     }
 
     public void redistributeProducts() {
@@ -35,9 +37,8 @@ public class WarehouseManager {
                 for (int i = 0; i < need.length; i++) {
                     int numberOfNeededProducts = need[i];
                     // find the closest warehouse that has this product in stock
-
                     while (numberOfNeededProducts > 0) {
-                        Warehouse provider = findClosestWarehouseForItem(map, warehouse, i); // deze methode moet wel iets vinden anders nullptr!
+                        Warehouse provider = findClosestWarehouseForItem(map, warehouse, i); // deze methode moet wel iets vinden anders nullptr! (wat current bug is)
                         int pickup = 0;
                         int numberOfAvail = Math.abs(neededProducts.get(provider)[i]);
                         int numberOfSteal = numberOfAvail - need[i];
@@ -45,10 +46,11 @@ public class WarehouseManager {
                         if(numberOfSteal == 0 || numberOfSteal > 0) 
                             pickup = need[i];
                         else 
-                            pickup = (need[i]-numberOfSteal);
+                            pickup = (need[i]-Math.abs(numberOfSteal));
                         
                         int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, pickup);
                         numberOfNeededProducts -= number;
+                        neededProducts.get(provider)[i] += number;
                         need[i] -= number;
                     }
 
@@ -60,7 +62,6 @@ public class WarehouseManager {
 
     public void makeOrderList() {
         for (Order order : map.getOrders()) {
-            
             int smallest = 0;
             Warehouse bestWarehouse = null;
             for (Warehouse warehouse : map.getWarehouses()) {
@@ -81,8 +82,17 @@ public class WarehouseManager {
             }
 
             orders.get(bestWarehouse).add(order);
-            orders.put(bestWarehouse, orders.get(bestWarehouse));
         }
+        
+        //Debug Print of the orders of the warehouses
+     /*   for(Warehouse house : orders.keySet()) {
+            System.out.println("House : " +house.getId());
+            for(Order order : orders.get(house)) {
+                System.out.print(" " + order.getId());
+            }
+            
+            System.out.println();
+        } */
     }
 
     public Warehouse findClosestWarehouseForItem(Map map, Warehouse startWarehouse, int productType) {
@@ -120,7 +130,7 @@ public class WarehouseManager {
             System.out.println("\n Needed products for warehouse ID " + house.getId());
 
             if (totalOrders != null && totalOrders.size() > 0) {
-                int[] totalProducts = new int[totalOrders.get(0).getProducts().length];
+                int[] totalProducts = new int[map.getOrders().get(0).getProducts().length];
 
                 for (Order o : totalOrders) {
                     int[] prods = o.getProducts();
@@ -135,18 +145,21 @@ public class WarehouseManager {
                 for (int i = 0; i < avail.length; i++) {
                     totalProducts[i] -= avail[i];
                     System.out.print("[" + i + "|" + totalProducts[i] + "]\t");
-
                 }
-
+                
                 neededProducts.put(house, totalProducts);
 
             } else {
                 neededProducts.put(house, null);
                 int[] avail = house.getProducts();
-                for (int i = 0; i < avail.length; i++) {
-                    System.out.print("[" + i + "|" + avail[i] + "]\t");
+                int[] totalProducts = new int[map.getOrders().get(0).getProducts().length];
 
+                for (int i = 0; i < avail.length; i++) {
+                    totalProducts[i] = -avail[i];
+                    System.out.print("[" + i + "|" + totalProducts[i] + "]\t");
                 }
+                
+                neededProducts.put(house, totalProducts);
             }
         }
     }
