@@ -35,7 +35,7 @@ public class DroneManager {
             numberOfRuns = 1;
             numberPerRun = numberOfSteal;
         } else {
-            numberOfRuns =  (totalWeight + droneWeight - 1 ) / droneWeight;
+            numberOfRuns = (totalWeight + droneWeight - 1) / droneWeight;
             numberPerRun = numberOfSteal / numberOfRuns;
         }
 
@@ -46,11 +46,58 @@ public class DroneManager {
 
             String unloadCommand = makeLineUnloadCommand(droneTurn, requester.getWareHouseID(), productType, numberPerRun);
             commands.add(unloadCommand);
-            
+
             incrementDrone();
         }
 
         return numberOfSteal;
+    }
+
+    public void deliverProduct(Map map, Warehouse warehouse, Order order) {
+        int[] neededItems = order.getProducts();
+
+        Drone drone = drones.get(0);
+        incrementDrone();
+
+        int maxWeight = drone.getMaxUnits();
+        int unitsNeeded = order.getUnits(map.getProducts());
+
+        if (unitsNeeded >= maxWeight) { // need 2 or more trips //TODO WRITE IT IN 2 TRIPS 
+
+        } else {
+            //load up everything for order and deliver.
+            for (int i = 0; i < neededItems.length; i++) {
+                if (neededItems[i] > 0) {
+
+                    String load = makeLineLoadCommand(droneTurn, warehouse.getId(), i, neededItems[i]);
+                    commands.add(load);
+                }
+            }
+
+            for (int i = 0; i < neededItems.length; i++) {
+                if (neededItems[i] > 0) {
+                    String deliver = makeLineDeliverCommand(droneTurn, order.getId(), i, neededItems[i]);
+                    commands.add(deliver);
+                }
+            }
+
+            incrementDrone();
+        }
+
+    }
+
+    public void makeOutput() {
+        System.out.println("=========================");
+        System.out.println(commands.size());
+        output.makeOutput(commands, "test");
+    }
+
+    private void incrementDrone() {
+        if (droneTurn >= map.getDrones().size() - 1) {
+            droneTurn = 0;
+        } else {
+            droneTurn++;
+        }
     }
 
     public String makeLineGeneralCommand(int droneId, char command, int warehouseId, int type, int amount) {
@@ -71,52 +118,6 @@ public class DroneManager {
 
     public String makeLineWaitCommand(int droneId, int amount) {
         return String.format("%d %c %d", droneId, 'W', amount);
-    }
-
-    public void deliverProduct(Map map, Warehouse warehouse, Order order) {
-        int[] neededItems = order.getProducts();
-
-        Drone drone = drones.get(0);
-        incrementDrone();
-
-        int maxWeight = drone.getMaxUnits();
-        int unitsNeeded = order.getUnits(map.getProducts());
-
-        if (unitsNeeded >= maxWeight) { // need 2 or more trips
-
-        } else {
-            //load up everything for order and deliver.
-            for (int i = 0; i < neededItems.length; i++) {
-                if (neededItems[i] > 0) {
-
-                    String load = makeLineLoadCommand(droneTurn, warehouse.getId(), i, neededItems[i]);
-                    commands.add(load);
-                }
-            }
-
-            for (int i = 0; i < neededItems.length; i++) {
-                if (neededItems[i] > 0) {
-                    String deliver = makeLineDeliverCommand(droneTurn, order.getId(), i, neededItems[i]);
-                    commands.add(deliver);
-                }
-            }
-            
-            incrementDrone();
-        }
-
-    }
-
-    public void makeOutput() {
-        System.out.println("=========================");
-        System.out.println(commands.size());
-        output.makeOutput(commands, "test");
-    }
-
-    private void incrementDrone() {
-         if(droneTurn >= map.getDrones().size()-1)
-             droneTurn = 0;
-         else
-             droneTurn++;
     }
 
 }
