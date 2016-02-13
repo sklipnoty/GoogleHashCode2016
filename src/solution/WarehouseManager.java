@@ -41,6 +41,7 @@ public class WarehouseManager {
                     int numberOfNeededProducts = need[i];
                     // find the closest warehouse that has this product in stock
                     while (numberOfNeededProducts > 0) {
+                        
                         Warehouse provider = findClosestWarehouseForItem(map, warehouse, i); // deze methode moet wel iets vinden anders nullptr! (wat current bug is)
                         int pickup = 0;
                         int numberOfAvail = Math.abs(neededProducts.get(provider)[i]);
@@ -51,11 +52,12 @@ public class WarehouseManager {
                         } else {
                             pickup = (need[i] - Math.abs(numberOfSteal));
                         }
+         
 
                         int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, pickup);
                         numberOfNeededProducts -= number;
                         neededProducts.get(provider)[i] += number;
-                        need[i] -= number;
+                        neededProducts.get(warehouse)[i] -= number;
                     }
 
                 }

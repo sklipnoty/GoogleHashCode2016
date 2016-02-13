@@ -67,4 +67,19 @@ public class Order implements Comparable<Order>{
     public int compareTo(Order o) {
         return Integer.compare(getDistanceFromWarehouse(),o.getDistanceFromWarehouse()); 
     }
+
+    public void subtract(int[] todo) {
+        for(int i = 0; i < todo.length; i++) {
+            products[i] -= todo[i];
+        }
+    }
+
+    public boolean isComplete() {
+        for(int i = 0; i <products.length; i++) {
+            if(products[i] >= 1 )
+                return false;
+        }
+        
+        return true;
+    }
 }

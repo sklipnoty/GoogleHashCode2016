@@ -58,32 +58,34 @@ public class DroneManager {
         int[] neededItems = order.getProducts();
 
         Drone drone = drones.get(0);
-        incrementDrone();
 
         int maxWeight = drone.getMaxUnits();
         int unitsNeeded = order.getUnits(map.getProducts());
 
-        if (unitsNeeded >= maxWeight) { // need 2 or more trips //TODO WRITE IT IN 2 TRIPS 
+        if (unitsNeeded >= maxWeight) { //TODO write this up.
 
             int[] need = neededItems.clone();
             int i = 0;
             int[] todo = new int[neededItems.length];
 
-            while (!execeedMaxWeight(order, todo, maxWeight) && i < need.length) {
-                if (need[i] > 0) {
-                    todo[i]++;
-                    need[i]--;
-                } else {
-                    deliverOrder(warehouse, order.getId(), todo);
-                    i++;
-                    todo = new int[neededItems.length];
+            while (!order.isComplete()) {
+
+                while (!execeedMaxWeight(order, todo, maxWeight, i, need) && i < need.length) {
+                    if (need[i] >= 1) {
+                        todo[i]++;
+                        need[i]--;
+                    } else {
+                        i++;
+                    }
                 }
+
+                deliverOrder(warehouse, order, order.getId(), todo);
+                todo = new int[neededItems.length];
             }
 
             //execute drone orders. 
         } else {
-            deliverOrder(warehouse, order.getId(), neededItems);
-            incrementDrone();
+            deliverOrder(warehouse, order, order.getId(), neededItems);
         }
 
     }
@@ -122,17 +124,34 @@ public class DroneManager {
         return String.format("%d %c %d", droneId, 'W', amount);
     }
 
-    private boolean execeedMaxWeight(Order order, int[] todo, int maxWeight) {
+    private boolean execeedMaxWeight(Order order, int[] todo, int maxWeight, int lastAddedProduct, int[] need) {
         int orderWeight = 0;
 
         for (int i = 0; i < todo.length; i++) {
             orderWeight += todo[i] * map.getProducts().get(i).getUnits();
         }
 
+        int weight = orderWeight;
+
+        while (weight > maxWeight) {
+            todo[lastAddedProduct]--;
+            need[lastAddedProduct]++;
+            
+            weight = 0;
+
+            for (int i = 0; i < todo.length; i++) {
+                weight += todo[i] * map.getProducts().get(i).getUnits();
+            }
+        }
+
         return (orderWeight > maxWeight);
     }
 
-    private void deliverOrder(Warehouse warehouse, int id, int[] todo) {
+    private void deliverOrder(Warehouse warehouse, Order order, int id, int[] todo) {
+        incrementDrone();
+
+        order.subtract(todo);
+
         for (int i = 0; i < todo.length; i++) {
             if (todo[i] > 0) {
 
@@ -148,11 +167,10 @@ public class DroneManager {
             }
         }
 
-        incrementDrone();
     }
 
     public void waitTillOrdersDelivered() {
-        for(int i = 0; i < drones.size(); i++) {
+        for (int i = 0; i < drones.size(); i++) {
             String command = makeLineWaitCommand(i, 1000);
             commands.add(command);
         }
