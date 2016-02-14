@@ -69,24 +69,12 @@ public class Map {
     
     public int moveDrone(Drone drone, Destinations dest)
     {
-        int result = distance(drone.getCoords(), dest.getCoordinate());
+        int result = drone.getCoords().distance(dest.getCoordinate());
         if(result != -1)
         {
             drone.setCoords(dest.getCoordinate());
         }
         return result;
-    }
-    
-    public int distance(Coordinate startCoordinate, Coordinate destinationCoordinate)
-    {
-        return (int) Math.ceil(Math.sqrt(Math.pow(Math.abs(startCoordinate.getX() - destinationCoordinate.getX()
-                                ), 2) 
-                                        + 
-                        Math.pow(Math.abs(startCoordinate.getY() - destinationCoordinate.getY()
-                                ), 2
-                        ) 
-                )
-        );
     }
 
     @Override

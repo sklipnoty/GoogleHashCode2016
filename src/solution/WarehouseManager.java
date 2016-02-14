@@ -76,7 +76,7 @@ public class WarehouseManager {
                     orders.put(warehouse, new ArrayList<>());
                 }
 
-                int distance = map.distance(warehouse.getCoords(), order.getCustomer().getCoordinate());
+                int distance = warehouse.getCoords().distance(order.getCustomer().getCoordinate());
 
                 if (smallest == 0) {
                     smallest = distance;
@@ -115,7 +115,7 @@ public class WarehouseManager {
             if (closestWarehouse == null) {
                 closestWarehouse = w;
             } else {
-                if (map.distance(startWarehouse.getCoords(), w.getCoords()) < map.distance(closestWarehouse.getCoords(), w.getCoords())) {
+                if (startWarehouse.getCoords().distance(w.getCoords()) < closestWarehouse.getCoords().distance(w.getCoords())) {
                     closestWarehouse = w;
                 }
             }
@@ -179,7 +179,7 @@ public class WarehouseManager {
             queues.put(warehouse, pq);
         }
 
-        int numberOfDeliveries = 50;
+        int numberOfDeliveries = 20;
 
         while (!queues.isEmpty()) {
             Iterator<Entry<Warehouse, PriorityQueue<Order>>> it = queues.entrySet().iterator();

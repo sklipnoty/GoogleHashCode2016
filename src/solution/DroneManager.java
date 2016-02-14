@@ -157,18 +157,18 @@ public class DroneManager {
             int[] todo = new int[neededItems.length];
             int i = 0;
 
-            while (i < neededItems.length && neededItems[i] <= 0) {
+            while (i < neededItems.length && (neededItems[i] <= 0 || calcWeight(todo) + getWeight(i) > maxWeight)) {
                 i++;
             }
 
             if (i < neededItems.length) {
 
-                while (i < neededItems.length && calcWeight(todo) + getWeight(i) < maxWeight) {
+                while (i < neededItems.length) {
                     todo[i]++;
                     neededItems[i]--;
                     totalProducts--;
 
-                    while (i < neededItems.length && neededItems[i] <= 0) {
+                    while (i < neededItems.length && (neededItems[i] <= 0 || calcWeight(todo) + getWeight(i) > maxWeight)) {
                         i++;
                     }
                 }
