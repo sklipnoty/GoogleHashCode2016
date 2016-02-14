@@ -5,7 +5,9 @@ import domain.Order;
 import domain.Warehouse;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
 public class WarehouseManager {
@@ -23,7 +25,7 @@ public class WarehouseManager {
 
         makeOrderList(); // Determine all orders per warehouse
         calculateNeededProducts(); // Use the above info to make a stock
-        printWarehouseStock(); 
+        printWarehouseStock();
         redistributeProducts(); // Redistribute needed items so stock is complete
         deliverOrders(); // Deliver orders.
         printWarehouseStock();
@@ -41,7 +43,7 @@ public class WarehouseManager {
                     int numberOfNeededProducts = need[i];
                     // find the closest warehouse that has this product in stock
                     while (numberOfNeededProducts > 0) {
-                        
+
                         Warehouse provider = findClosestWarehouseForItem(map, warehouse, i); // deze methode moet wel iets vinden anders nullptr! (wat current bug is)
                         int pickup = 0;
                         int numberOfAvail = Math.abs(neededProducts.get(provider)[i]);
@@ -170,11 +172,29 @@ public class WarehouseManager {
     private void deliverOrders() {
 
         droneManager.waitTillOrdersDelivered();
+        HashMap<Warehouse, PriorityQueue<Order>> queues = new HashMap<>();
+
         for (Warehouse warehouse : orders.keySet()) {
             PriorityQueue<Order> pq = new PriorityQueue<>(orders.get(warehouse));
-            while (!pq.isEmpty()) {
-                Order o = pq.poll();
-                droneManager.deliverProduct(map, warehouse, o);
+            queues.put(warehouse, pq);
+        }
+
+        int numberOfDeliveries = 50;
+
+        while (!queues.isEmpty()) {
+            Iterator<Entry<Warehouse, PriorityQueue<Order>>> it = queues.entrySet().iterator();
+            while (it.hasNext()) {
+                Entry<Warehouse, PriorityQueue<Order>> pair = it.next();
+                PriorityQueue<Order> pq = pair.getValue();
+
+                for (int i = 0; (!pq.isEmpty()) && i < numberOfDeliveries; i++) {
+                    Order o = pq.poll();
+                    droneManager.deliverProduct(map, pair.getKey(), o);
+                }
+
+                if (pq.isEmpty()) {
+                    it.remove();
+                }
             }
         }
     }

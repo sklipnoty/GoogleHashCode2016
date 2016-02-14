@@ -40,11 +40,6 @@ public class DroneManager {
             numberOfRuns = (int) Math.ceil((double)(numberOfSteal) / (double)numberPerRun);
         }
 
-        if (productType == 119) {
-            System.out.println("Picking from [" + provider.getWareHouseID() + " to " + requester.getWareHouseID() + "] type : " + productType + " amount : " + numberOfSteal + " weight :" + map.getProducts().get(productType).getUnits());
-            System.out.println(numberOfRuns + " ; " + numberPerRun);
-        }
-        
         int numberOfCompleted = 0;
 
         for (int i = 0; i < numberOfRuns; i++) {
