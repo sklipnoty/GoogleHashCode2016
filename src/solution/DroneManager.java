@@ -1,5 +1,6 @@
 package solution;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import start.OutputWriter;
 import domain.Drone;
 import domain.Map;
@@ -36,7 +37,7 @@ public class DroneManager {
             numberOfRuns = 1;
             numberPerRun = numberOfSteal;
         } else {
-            numberOfRuns = (totalWeight + droneWeight - 1) / droneWeight;
+            numberOfRuns = (int) Math.ceil((double)(totalWeight) / (double)droneWeight);
             numberPerRun = numberOfSteal / numberOfRuns;
         }
 
@@ -62,25 +63,11 @@ public class DroneManager {
         int maxWeight = drone.getMaxUnits();
         int unitsNeeded = order.getUnits(map.getProducts());
 
-        if (unitsNeeded >= maxWeight) { //TODO write this up.
+        if (unitsNeeded > maxWeight) { //TODO write this up.
 
-            int[] need = neededItems.clone();
-            int i = 0;
-            int[] todo = new int[neededItems.length];
-
-            while (!order.isComplete()) {
-
-                while (!execeedMaxWeight(order, todo, maxWeight, i, need) && i < need.length) {
-                    if (need[i] >= 1) {
-                        todo[i]++;
-                        need[i]--;
-                    } else {
-                        i++;
-                    }
-                }
-
-                deliverOrder(warehouse, order, order.getId(), todo);
-                todo = new int[neededItems.length];
+            List<int[]> todos = divideInTrips(maxWeight, neededItems);
+            for (int i = 0; i < todos.size(); i++) {
+                deliverOrder(warehouse, order, order.getId(), todos.get(i));
             }
 
             //execute drone orders. 
@@ -124,29 +111,6 @@ public class DroneManager {
         return String.format("%d %c %d", droneId, 'W', amount);
     }
 
-    private boolean execeedMaxWeight(Order order, int[] todo, int maxWeight, int lastAddedProduct, int[] need) {
-        int orderWeight = 0;
-
-        for (int i = 0; i < todo.length; i++) {
-            orderWeight += todo[i] * map.getProducts().get(i).getUnits();
-        }
-
-        int weight = orderWeight;
-
-        while (weight > maxWeight) {
-            todo[lastAddedProduct]--;
-            need[lastAddedProduct]++;
-            
-            weight = 0;
-
-            for (int i = 0; i < todo.length; i++) {
-                weight += todo[i] * map.getProducts().get(i).getUnits();
-            }
-        }
-
-        return (orderWeight > maxWeight);
-    }
-
     private void deliverOrder(Warehouse warehouse, Order order, int id, int[] todo) {
         incrementDrone();
 
@@ -174,6 +138,54 @@ public class DroneManager {
             String command = makeLineWaitCommand(i, 1000);
             commands.add(command);
         }
+    }
+
+    private List<int[]> divideInTrips(int maxWeight, int[] neededItems) {
+        List<int[]> todos = new ArrayList<>();
+        int totalProducts = 0;
+        for (int i = 0; i < neededItems.length; i++) {
+            totalProducts += neededItems[i];
+        }
+
+        while (totalProducts > 0) {
+            int[] todo = new int[neededItems.length];
+            int i = 0;
+
+            while (i < neededItems.length && neededItems[i] <= 0) {
+                i++;
+            }
+
+            if (i < neededItems.length) {
+
+                while (i < neededItems.length && calcWeight(todo) + getWeight(i) < maxWeight) {
+                    todo[i]++;
+                    neededItems[i]--;
+                    totalProducts--;
+                    
+                    while (i < neededItems.length && neededItems[i] <= 0) {
+                        i++;
+                    }
+                }
+
+                todos.add(todo);
+            }
+        }
+
+        return todos;
+    }
+
+    private int calcWeight(int[] todo) {
+        int weight = 0;
+
+        for (int i = 0; i < todo.length; i++) {
+            weight += (getWeight(i) * todo[i]);
+        }
+
+        return weight;
+    }
+
+    private int getWeight(int productType) {
+        return map.getProducts().get(productType).getUnits();
     }
 
 }

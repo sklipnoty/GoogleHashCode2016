@@ -21,11 +21,11 @@ public class WarehouseManager {
         this.map = map;
         this.droneManager = new DroneManager(map);
 
-        makeOrderList();
-        calculateNeededProducts();
-        printWarehouseStock();
-        redistributeProducts();
-        deliverOrders();
+        makeOrderList(); // Determine all orders per warehouse
+        calculateNeededProducts(); // Use the above info to make a stock
+        printWarehouseStock(); 
+        redistributeProducts(); // Redistribute needed items so stock is complete
+        deliverOrders(); // Deliver orders.
         printWarehouseStock();
         this.droneManager.makeOutput();
 
@@ -52,7 +52,6 @@ public class WarehouseManager {
                         } else {
                             pickup = (need[i] - Math.abs(numberOfSteal));
                         }
-         
 
                         int number = droneManager.transferProductsFromOtherWarehouse(warehouse, provider, i, pickup);
                         numberOfNeededProducts -= number;
