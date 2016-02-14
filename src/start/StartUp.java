@@ -11,7 +11,7 @@ public class StartUp
 {
     public static void main(String[] args) throws IOException
     {
-        Scanner in = new Scanner(new File("input/busy_day.in"));
+        Scanner in = new Scanner(new File("input/redundancy.in"));
         InputReader reader = new InputReader(in);
         Map map = reader.readInput();
         MapSimulator mapSim = new MapSimulator();

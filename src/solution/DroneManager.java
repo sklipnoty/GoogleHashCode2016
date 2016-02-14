@@ -26,7 +26,6 @@ public class DroneManager {
     }
 
     public int transferProductsFromOtherWarehouse(Warehouse requester, Warehouse provider, int productType, int numberOfSteal) {
-        //     System.out.println("Picking from [" + provider.getWareHouseID() + " to " + requester.getWareHouseID() + "] type : " + productType + " amount : " + numberOfSteal);
         int totalWeight = numberOfSteal * map.getProducts().get(productType).getUnits();
         int droneWeight = drones.get(0).getMaxUnits();
 
@@ -37,18 +36,30 @@ public class DroneManager {
             numberOfRuns = 1;
             numberPerRun = numberOfSteal;
         } else {
-            numberOfRuns = (int) Math.ceil((double)(totalWeight) / (double)droneWeight);
-            numberPerRun = numberOfSteal / numberOfRuns;
+            numberPerRun = (int) Math.floor((double) droneWeight / (double) map.getProducts().get(productType).getUnits());
+            numberOfRuns = (int) Math.ceil((double)(numberOfSteal) / (double)numberPerRun);
         }
+
+        if (productType == 119) {
+            System.out.println("Picking from [" + provider.getWareHouseID() + " to " + requester.getWareHouseID() + "] type : " + productType + " amount : " + numberOfSteal + " weight :" + map.getProducts().get(productType).getUnits());
+            System.out.println(numberOfRuns + " ; " + numberPerRun);
+        }
+        
+        int numberOfCompleted = 0;
 
         for (int i = 0; i < numberOfRuns; i++) {
 
+            while(numberOfCompleted + numberPerRun > numberOfSteal) {
+                numberPerRun--;
+            }
+            
             String loadCommand = makeLineLoadCommand(droneTurn, provider.getWareHouseID(), productType, numberPerRun);
             commands.add(loadCommand);
 
             String unloadCommand = makeLineUnloadCommand(droneTurn, requester.getWareHouseID(), productType, numberPerRun);
             commands.add(unloadCommand);
-
+            
+            numberOfCompleted += numberPerRun;
             incrementDrone();
         }
 
@@ -161,7 +172,7 @@ public class DroneManager {
                     todo[i]++;
                     neededItems[i]--;
                     totalProducts--;
-                    
+
                     while (i < neededItems.length && neededItems[i] <= 0) {
                         i++;
                     }
