@@ -44,7 +44,7 @@ public class Coordinate
 
         int deltasSquaredSum = deltaX * deltaX + deltaY * deltaY;
 
-        return (int) Math.sqrt(deltasSquaredSum);
+        return (int) Math.ceil(Math.sqrt(deltasSquaredSum));
     }
 
 }
